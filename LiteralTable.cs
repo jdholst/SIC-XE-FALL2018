@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -23,10 +23,13 @@ namespace SICXE
     {
         private LinkedList<Literal> table;
 
+        /// <summary>
+        /// Number of literals in the table.
+        /// </summary>
         public int Count { get { return table.Count; } }
 
         /// <summary>
-        /// Constructor that initializes table and addressCounter fields.
+        /// Constructor that initializes the table.
         /// </summary>
         public LiteralTable()
         {
@@ -58,6 +61,11 @@ namespace SICXE
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Searches for a set of literals.
+        /// </summary>
+        /// <param name="literals"></param>
+        /// <returns> All found literals </returns>
         public Literal[] Search(params string[] literals)
         {
             List<Literal> foundLiterals = new List<Literal>();
@@ -76,6 +84,11 @@ namespace SICXE
             return foundLiterals.ToArray();
         }
 
+        /// <summary>
+        /// Searches for passed in literal and changes its address.
+        /// </summary>
+        /// <param name="literal"> Literal to change </param>
+        /// <param name="address"> New address of literal </param>
         public void SetLiteralAddress(Literal literal, string address)
         {
             var foundLiteral = table.Find(literal);
@@ -96,27 +109,27 @@ namespace SICXE
         /// Inserts the literal onto the end of the LinkedList. Can insert two types of literals:
         /// Character and Hexidecimal (denoted as =X and =C respectively).
         /// </summary>
-        /// <param name="expression"></param>
-        public void Insert(string expression)
+        /// <param name="literal"></param>
+        public void Insert(string literal)
         {
-            if(expression[0] == '=')
+            if(literal[0] == '=')
             {
-                string name = expression;
+                string name = literal;
                 bool exist = false;
 
-                expression = expression.Substring(1, expression.Length - 1);
+                literal = literal.Substring(1, literal.Length - 1);
 
                 var insertLiteral = new Literal()
                 {
                     Name = name,
-                    Value = ExpressionHandler.GetConstValue(expression),
-                    Length = ExpressionHandler.GetConstLength(expression),
+                    Value = Expression.GetConstValue(literal),
+                    Length = Expression.GetConstLength(literal),
                     Address = "0" // default address
                 };
 
-                foreach (var literal in table)
+                foreach (var lit in table)
                 {
-                    if (literal.Value == insertLiteral.Value) exist = true;
+                    if (lit.Value == insertLiteral.Value) exist = true;
                 }
 
                 if (!exist)
@@ -130,6 +143,10 @@ namespace SICXE
             }
         }
 
+        /// <summary>
+        /// Gets the enumerator of the literal table.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<Literal> GetEnumerator()
         {
             return table.GetEnumerator();
