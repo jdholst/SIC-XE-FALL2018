@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
 Name:        Jacob Holst
 Assignment:  Assignment 3 (Pass 1)
 Due Date:    10/24/18
@@ -18,8 +18,6 @@ Description: This module contains functions to read source programs line-by-line
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace SICXE
 {
@@ -29,7 +27,6 @@ namespace SICXE
     /// </summary>
     public class Pass1 : Pass
     {
-        // pass 1 data for internal use
         private string locationCounter;
 
         /// <summary>
@@ -204,7 +201,7 @@ namespace SICXE
                 }
                 else if (operation.ToUpper() == "BYTE")
                 {
-                    counter = ExpressionHandler.GetConstLength(operand);
+                    counter = Expression.GetConstLength(operand);
                 }
                 else if (operation.ToUpper() == "EQU")
                 {
@@ -361,7 +358,7 @@ namespace SICXE
             }
             else if(value.Contains("+") || value.Contains("-"))
             {
-                symbol = ExpressionHandler.ArithmeticEvaluation(value, symbols);
+                symbol = Expression.ArithmeticEvaluation(value, symbols);
 
                 rFlag = symbol.RFlag;
                 intVal = symbol.Value;
