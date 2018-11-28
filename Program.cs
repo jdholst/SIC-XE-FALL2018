@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace SICXE
@@ -32,18 +32,15 @@ namespace SICXE
 
             pass.RunPass(Path.Combine(currentDirectory, fileName));
 
-            var pass2 = new Pass2(opcodes, pass);
+            var pass2 = new Pass2(pass);
 
-            pass2.RunPass(Path.Combine(currentDirectory, fileName.Replace(".asm", ".tmp")));
+            pass2.RunPass(Path.Combine(currentDirectory, fileName.Replace(".txt", ".tmp").Replace(".asm", ".tmp")));
 
-            Console.WriteLine("Intermediate Program: ");
-            Console.WriteLine(pass.GeneratedProgram);
+            Console.WriteLine("Listing File: ");
+            Console.WriteLine(pass2.GeneratedProgram);
 
-            Console.WriteLine("Symbol Table: ");
-            pass.Symbols.View();
-
-            Console.WriteLine("Literal Table: ");
-            pass.Literals.View();
+            Console.WriteLine("Object Program: ");
+            Console.WriteLine(pass2.ObjectProgram);
 
             Console.ReadKey();
         }
