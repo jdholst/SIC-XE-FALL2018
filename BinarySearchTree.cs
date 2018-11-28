@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,17 +15,20 @@ namespace SICXE
     }
 
     /// <summary>
-    /// Abstract BST class containing all neccesary functionality.
+    /// Generic BST class. Uses a comparer to insert and search for nodes.
     /// </summary>
     public class BinarySearchTree<T> : IEnumerable<T>
     {
         private BSTNode<T> tree;
         private IComparer comparer;
 
+        /// <summary>
+        /// Total number of nodes in the tree.
+        /// </summary>
         public int Count{ get; private set; }
 
         /// <summary>
-        /// BST Constructor. Initializes tree to null.
+        /// BST Constructor. Initializes tree to null. Sets the comparer to be used.
         /// </summary>
         public BinarySearchTree(IComparer comparer)
         {
@@ -34,32 +37,56 @@ namespace SICXE
             this.comparer = comparer;
         }
 
+        /// <summary>
+        /// Displays the tree using LVR traversal
+        /// </summary>
         public void InView()
         {
             InView(tree);
         }
 
+        /// <summary>
+        /// Displays the tree using VLR traversal
+        /// </summary>
         public void PreView()
         {
             PreView(tree);
         }
 
+        /// <summary>
+        /// Displays the tree using VRL traversal
+        /// </summary>
         public void PostView()
         {
             PostView(tree);
         }
 
+        /// <summary>
+        /// Inserts an element.
+        /// </summary>
+        /// <param name="element"></param>
         public void Insert(T element)
         {
             Insert(element, ref tree);
             Count++;
         }
 
+        /// <summary>
+        /// Removes an element.
+        /// </summary>
+        /// <param name="element"></param>
         public void Remove(T element)
         {
             Remove(element, ref tree);
         }
 
+        /// <summary>
+        /// Searches for an element
+        /// </summary>
+        /// <param name="element"> Search element</param>
+        /// <param name="foundElement"> Element found in the search. 
+        /// An empty element is set if failed </param>
+        /// <returns> Returns true for a successful search </returns>
         public bool Search(T element, out T foundElement)
         {
             var foundNode = Search(element, tree);
@@ -77,6 +104,11 @@ namespace SICXE
             }
         }
 
+        /// <summary>
+        /// Replaces an element.
+        /// </summary>
+        /// <param name="oldElement"> Search Element</param>
+        /// <param name="newElement"> New Element </param>
         public void Replace(T oldElement, T newElement)
         {
             Replace(oldElement, newElement, ref tree);
