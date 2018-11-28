@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
 Name:        Jacob Holst
 Assignment:  Assignment 2 (Expression Processing)
 Due Date:    10/03/18
@@ -22,27 +22,22 @@ using System.Text;
 namespace SICXE
 {
     /// <summary>
-    /// Static handler class containing methods to process lines of expressions and insert literals.
+    /// Static class containing methods to process expressions.
     /// </summary>
-    public static class ExpressionHandler
+    public static class Expression
     {
-
         /// <summary>
-        /// Checks the n, i, and x bits and what kind of operation is used.
+        /// Sets N, I, and X bits based on what addressing type is used.
         /// </summary>
-        /// <param name="expression"> IN </param>
-        /// <param name="nBit"> IN/OUT </param>
-        /// <param name="iBit"> IN/OUT </param>
-        /// <param name="xBit"> IN/OUT </param>
-        /// <param name="operation"> IN/OUT </param>
-        public static byte[] CheckAdressMode(string expression)
+        /// <param name="expression"></param>
+        public static byte[] SetAdressMode(string expression)
         {
             bool isNumber = int.TryParse(expression, out int i);
-            byte[] newByte = { 0, 0b0011, 0b1111, 0 };
+            byte[] newByte = { 0, 0b0011, 0b0000, 0 };
 
-            newByte[1] = expression.Contains('#') || isNumber ? (byte)(newByte[1] & 0b0001) : (byte)(newByte[1] | 0);
-            newByte[1] = expression.Contains('@') ? (byte)(newByte[1] & 0b0010) : (byte)(newByte[1] | 0);
-            newByte[2] = expression.Contains (",X") ? (byte)(newByte[2] & 0b1000) : (byte)(newByte[2] & 0);
+            newByte[1] = expression.Contains('#') || isNumber ? (byte)(newByte[1] & 0b0001) : newByte[1];
+            newByte[1] = expression.Contains('@') ? (byte)(newByte[1] & 0b0010) : newByte[1];
+            newByte[2] = expression.Contains (",X") ? (byte)(newByte[2] | 0b1000) : newByte[2];
 
             return newByte;
         }
@@ -50,10 +45,9 @@ namespace SICXE
         /// <summary>
         /// Evaluates both sides of an expression. Adds the values and adjusts the Relocatable.
         /// </summary>
-        /// <param name="operation"> IN </param>
-        /// <param name="values"> IN </param>
-        /// <param name="symbols"> IN </param>
-        /// <returns> Symbol </returns>
+        /// <param name="expression"></param>
+        /// <param name="symbolTable"> Used to search for symbols in the expression </param>
+        /// <returns> Symbol containing results of the operation </returns>
         public static Symbol ArithmeticEvaluation(string expression, SymbolTable symbolTable)
         {
             Symbol adjustedSymbol = new Symbol()
@@ -170,8 +164,8 @@ namespace SICXE
         /// <summary>
         /// Extracts each symbol name or number out of an expression
         /// </summary>
-        /// <param name="expression"> IN </param>
-        /// <returns> string[] </returns>
+        /// <param name="expression"></param>
+        /// <returns> Symbols parsed from expression </returns>
         public static string[] ParseSymbolNames(string expression)
         {
             var symbols = new List<string>();
@@ -203,6 +197,11 @@ namespace SICXE
             return symbols.ToArray();
         }
 
+        /// <summary>
+        /// Determines the Hexidecimal value of a constant.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns> Constant Value </returns>
         public static string GetConstValue(string expression)
         {
             string value = ParseLiteralValue(expression), returnValue = string.Empty;
@@ -236,6 +235,11 @@ namespace SICXE
             return returnValue;
         }
 
+        /// <summary>
+        /// Determines length of a contant.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns> Length of contatin</returns>
         public static int GetConstLength(string expression)
         {
             if (char.ToUpper(expression[0]) == 'C')
@@ -258,6 +262,11 @@ namespace SICXE
             }
         }
 
+        /// <summary>
+        /// Parses the value within the quotes of a constant.
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns> Parsed contant value </returns>
         private static string ParseLiteralValue(string expression)
         {
             List<char> literalChars = new List<char>();
